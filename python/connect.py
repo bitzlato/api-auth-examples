@@ -1,36 +1,43 @@
+import datetime
 import http
 import python_http_client
-import datetime
 import time
-
-from jose import jwt, jws
+import random
+from jose import jws
 from jose.constants import ALGORITHMS
 
+# secret user key
+key = {
+    "kty": "EC",
+    "alg": "ES256",
+    "crv": "P-256",
+    "x": "pSH0jvbtVZiseTpJZk0_yfudEIv86uwjeH_gr1qmOGA",
+    "y": "eGdC9EIGmhCheM_T8vhS4Qwk7RfaPRBxF3W5omgBc_M",
+    "d": "DuSjR5eZBp5S-9HNKA8kRQFA_3Akkept-dTbwFoq_3w"
+}
 
-# secret user key 
-secret2 =   {"kty":"EC","alg":"ES256","crv":"P-256","x":"s1kv2ea3dpr4ZxigdS7pZzfLBlR2SeyPJe8EDdkdVa4","y":"JckGgFiNR2bmzsI2-cxcIY--zXkTzMYD715b386H_pw","d":"v-R0HYNXQi0KzxG9U_7cOk0QGn7hVslvVOUzqBvGdR8"}
 
 def main():
     dt = datetime.datetime.now()
     ts = time.mktime(dt.timetuple())
-    ms = str(int(round(time.time() * 1000)))
     claims = {
         # user identificator
-        "email": "testuser@test.com",
+        "email": "bitzlato.demo@gmail.com",
         # leave as is
         "aud": "usr",
         # token issue time
         "iat": int(ts),
         # unique token identificator
-        "jti": ms
+        "jti": hex(random.getrandbits(64))
     }
+    print(claims)
     # make token with claims from secret user key
-    token = jws.sign(claims, secret2, algorithm=ALGORITHMS.ES256)
+    token = jws.sign(claims, key, headers={"kid": "2"}, algorithm=ALGORITHMS.ES256)
 
     conn = http.client.HTTPSConnection("demo.bitzlato.com", 443)
 
     # make  request against api endpoint with Authorization: Bearer <token> header
-    res = conn.request("GET", "/api/auth/whoami", headers = {
+    res = conn.request("GET", "/api/auth/whoami", headers={
         "Authorization": "Bearer " + token
     })
     r1 = conn.getresponse()

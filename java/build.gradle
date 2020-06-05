@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.bitzlato.auth.examples'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.nimbusds:nimbus-jose-jwt:8.19"
+}
+
+mainClassName = 'com.bitzlato.auth.examples.Connect'

@@ -1,33 +1,47 @@
 const axios = require('axios')
 const jose = require('node-jose')
 
+// секретный ключ пользователя (private key). ID данного ключа (kid) = "2"
+const secret =
+    {
+        "kty":"EC","alg":"ES256","crv":"P-256",
+        "x":"pSH0jvbtVZiseTpJZk0_yfudEIv86uwjeH_gr1qmOGA",
+        "y":"eGdC9EIGmhCheM_T8vhS4Qwk7RfaPRBxF3W5omgBc_M",
+        "d":"DuSjR5eZBp5S-9HNKA8kRQFA_3Akkept-dTbwFoq_3w"
+    }
 
-// секретный ключ пользователя 
-const secret = 
-	{"kty":"EC","alg":"ES256","crv":"P-256","x":"lu122ea3dpr4ZxigdS7pZzfLBlR2SeyPJe8EDdkdVa4","y":"JckGgFiNR2bmzsI2-cxcIY--zXkTzMYD715b386H_pw","d":"v-R0HYNXQi0KzxG9U_7cOk0QGn7hVslvVOUzqBvGdR8"} 
-	// обязательные claims
-// requred claims
+// обязательные claims
+// required claims
 const claims = {
-    // user identificator
-    // идентификатор пользователя
-    email: "testuser@test.com",
+    // user identity, one of: email, uid (user id), subject, tgid (telegram id)
+    // идентификатор пользователя, одно из: email, uid (user id), subject, tgid (telegram id)
+    // Email won't work in case when a user has two accounts with the same email, prefer user id (uid) for such case.
+    // Email не будет работать в случае если у пользователя два аккаунта с один и тем же email (auth0 & google)
+    // Используйте uid в таких случаях
+    email: "bitzlato.demo@gmail.com",
     // leave as is
     // оставляем как есть
     aud: "usr",
     // token issue time
     // время когда выпущен токен
     iat: (Date.now() / 1000) | 0,
-    // unique token identificator
+    // unique token identifier
     // уникальный идентификатор токена
     jti: jose.util.randomBytes(8).toString('base64')
 }
 
 async function connect() {
-    // generate jwt token from user secret key
-    // генерируем jwt token из серктеного ключа пользователя 
+    // generate jwt token from users' private key
+    // генерируем jwt token из секретного ключа пользователя
     const jwt = await jose.JWS.createSign(
-        { alg: 'ES256', format: 'compact' },
-        { key: secret, reference: false },
+        {
+            alg: 'ES256',
+            format: 'compact',
+            // You omit this header if the account has a single key
+            // Этот заголовок можно не указывать, если у аккаунта единственный ключ
+            fields: { kid: "2" }
+        },
+        {key: secret, reference: false},
     )
         .update(JSON.stringify(claims))
         .final()
@@ -35,17 +49,17 @@ async function connect() {
     // set auth header with token
     // установливаем заголовок аутентификации с токеном
     const options = {
-        headers: { Authorization: `Bearer ${jwt}` },
+        headers: {Authorization: `Bearer ${jwt}`},
     }
 
     // change to bitzlato api host
     // изменить на хост api bitzlato
     axios.get('https://demo.bitzlato.com/api/auth/whoami', options)
         .then(response => {
-            console.log(response)
+            console.log(response.data)
         })
 }
 
-connect();
+connect().then(_ => _);
 
 

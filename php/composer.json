@@ -1,0 +1,6 @@
+{
+  "require": {
+    "web-token/jwt-easy": "^2.1",
+    "web-token/jwt-signature-algorithm-ecdsa": "^2.1"
+  }
+}

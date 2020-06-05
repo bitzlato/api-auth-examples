@@ -6,20 +6,24 @@ using JsonWebToken;
 
 namespace TokenDemo
 {
-    class Program
+    internal static class Program
     {
-        private const string privkey =
-            "{\"kty\":\"EC\",\"alg\":\"ES256\",\"crv\":\"P-256\"," +
-            "\"x\":\"lmzBhWRXSZTx5q6b80PK_GL7b94YYXI1hNB3YdJ6bzQ\",\"y\":\"sXwmQX8sAm5yoybyq0RvMMhQp7Ox4lvhdpy_xPjfs58\"," +
-            "\"d\":\"P_MepPu0IPJEIQ_WUL5p12qb-phfMBdiDC8vHgdwvJ4\"}";
+        /**
+         * This is your private key. This key has id = 2
+         */
+        private const string PrivKey = "{" +
+                                       "\"kty\":\"EC\",\"alg\":\"ES256\",\"crv\":\"P-256\"," +
+                                       "\"x\":\"pSH0jvbtVZiseTpJZk0_yfudEIv86uwjeH_gr1qmOGA\"," +
+                                       "\"y\":\"eGdC9EIGmhCheM_T8vhS4Qwk7RfaPRBxF3W5omgBc_M\"," +
+                                       "\"d\":\"DuSjR5eZBp5S-9HNKA8kRQFA_3Akkept-dTbwFoq_3w\"" +
+                                       "}";
+        private const string Email = "bitzlato.demo@gmail.com";
 
-        private const string email = "hajife8896@iopmail.com";
+        private static readonly Random Rnd = new Random();
 
-        private static readonly Random rnd = new Random();
-
-        static void Main(string[] args)
+        private static void Main()
         {
-            var privJwk = ECJwk.FromJson(privkey);
+            var privJwk = Jwk.FromJson(PrivKey);
 
             var descriptor = new JwsDescriptor()
             {
@@ -27,10 +31,12 @@ namespace TokenDemo
                 SigningKey = privJwk,
                 IssuedAt = DateTime.UtcNow,
                 Audience = "usr",
-                JwtId = rnd.Next().ToString("X")
-                // optionally set kid if you've got more than one key: KeyId = 1
+                JwtId = Rnd.Next().ToString("X"),
+                // Optionally set kid if you've got more than one key. Provide the correct int value.
+                // see: https://tools.ietf.org/html/rfc7515#section-4.1.4
+                KeyId = 2.ToString()
             };
-            descriptor.AddClaim("email", email);
+            descriptor.AddClaim("email", Email);
 
             var writer = new JwtWriter();
             var token = writer.WriteTokenString(descriptor);

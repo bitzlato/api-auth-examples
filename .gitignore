@@ -1,4 +1,5 @@
 .idea
 [Bb]in/
 [Oo]bj/
-
+out
+venv
