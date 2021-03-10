@@ -15,17 +15,14 @@ class BitzlatoClient
   end
 
   def post(path, params = {})
-    response = connection.post path do |req|
-      req.body = params.to_json
-    end
-    parse_response response
+    parse_response connection.post path, params.to_json
   end
 
   private
 
   def parse_response(response)
-    raise "Response status is #{response.status}" unless response.success?
-    # TODO validate content type and status
+    raise "Wrong response status (#{response.status})" unless response.success?
+    raise "Wrong content type (#{response['content-type']})" unless response['content-type'] == 'application/json'
     JSON.parse response.body
   end
 
