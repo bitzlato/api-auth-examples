@@ -1,8 +1,10 @@
 require 'securerandom'
 
 class BitzlatoClient
+  WrongResponse = Class.new StandardError
+
   def initialize(home_url: , key: , logger: false, email: nil, uid: nil)
-    raise 'email or uid must be presented' if uid.nil? && email.nil?
+    raise ArgumentError, 'email or uid must be presented' if uid.nil? && email.nil?
     @email = email
     @uid = uid
     @jwk = JWT::JWK.import key
@@ -21,8 +23,8 @@ class BitzlatoClient
   private
 
   def parse_response(response)
-    raise "Wrong response status (#{response.status})" unless response.success?
-    raise "Wrong content type (#{response['content-type']})" unless response['content-type'] == 'application/json'
+    raise WrongResponse, "Wrong response status (#{response.status})" unless response.success?
+    raise WrongResponse, "Wrong content type (#{response['content-type']})" unless response['content-type'] == 'application/json'
     JSON.parse response.body
   end
 
