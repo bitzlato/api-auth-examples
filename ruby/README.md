@@ -1,3 +1,5 @@
+# Manual usage
+
 How to run:
 
 ```
@@ -13,3 +15,9 @@ export BITZLATO_API_CLIENT_UID=12
 ./example.rb get /api/auth/whoami
 ./example.rb post /api/gate/v1/invoices/ '{"cryptocurrency":"BTC", "amount":"0.002","comment":"test invoice 2"}'
 ```
+
+# Using gem
+
+There are also exists `gem bitzlato` - https://rubygems.org/gems/bitzlato
+
+Source: https://github.com/finfex/bitzlato
