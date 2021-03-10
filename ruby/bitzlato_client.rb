@@ -16,8 +16,6 @@ class BitzlatoClient
 
   def post(path, params = {})
     response = connection.post path do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Accept'] = 'application/json'
       req.body = params.to_json
     end
     parse_response response
@@ -45,6 +43,10 @@ class BitzlatoClient
   def connection
     @connection ||= Faraday.new url: @home_url do |c|
       c.use Faraday::Response::Logger if @logger
+      c.headers = {
+        'Content-Type' => 'application/json',
+        'Accept' => 'application/json'
+      }
       c.authorization :Bearer, bearer
     end
   end
