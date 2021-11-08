@@ -17,7 +17,7 @@ import java.util.*
 
 class TokenGenerator : () -> String {
     /**
-     * This is your private key. This key has id = 2
+     * This is your private key. This key has id = 1 (kid)
      */
     private val jsonWebKey = """
         {
@@ -27,7 +27,7 @@ class TokenGenerator : () -> String {
             "d":"DuSjR5eZBp5S-9HNKA8kRQFA_3Akkept-dTbwFoq_3w"
         }
     """.trimIndent()
-    private val kid = 2
+    private val kid = 1
     private val userId = 13491868
 
     private val jwsHeader = JWSHeader.Builder(JWSAlgorithm.ES256)
@@ -64,7 +64,7 @@ class TokenGenerator : () -> String {
     }
 }
 
-private val baseUrl = URI.create("https://demo.bitzlato.com/api/p2p/")
+private val baseUrl = URI.create("https://www.bitzlato.com/api/p2p/")
 
 fun main() {
     val tokenGen = TokenGenerator()

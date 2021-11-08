@@ -9,7 +9,7 @@ namespace TokenDemo
     internal static class Program
     {
         /**
-         * This is your private key. This key has id = 2
+         * This is your private key. This key has id = 1
          */
         private const string PrivKey = "{" +
                                        "\"kty\":\"EC\",\"alg\":\"ES256\",\"crv\":\"P-256\"," +
@@ -34,7 +34,7 @@ namespace TokenDemo
                 JwtId = Rnd.Next().ToString("X"),
                 // Optionally set kid if you've got more than one key. Provide the correct int value.
                 // see: https://tools.ietf.org/html/rfc7515#section-4.1.4
-                KeyId = 2.ToString()
+                KeyId = 1.ToString()
             };
             descriptor.AddClaim("email", Email);
 
@@ -52,7 +52,7 @@ namespace TokenDemo
                 new AuthenticationHeaderValue("Bearer", token);
 
             var who = Task.Run(async () => await
-                httpClient.GetStringAsync("https://demo.bitzlato.com/api/auth/whoami")
+                httpClient.GetStringAsync("https://www.bitzlato.com/api/auth/whoami")
             ).GetAwaiter().GetResult();
 
             Console.WriteLine("Who am I:");

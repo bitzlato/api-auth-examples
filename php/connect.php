@@ -51,7 +51,7 @@ curl_setopt_array($curl, [
     // turn on result displaying
     CURLOPT_RETURNTRANSFER => 1,
     // url of request || url запроса
-    CURLOPT_URL => 'https://demo.bitzlato.com/api/auth/whoami',
+    CURLOPT_URL => 'https://www.bitzlato.com/api/auth/whoami',
     // adding token to headers | добавляем токен в заголовки
     CURLOPT_HTTPHEADER => array(
         "Authorization: Bearer $jws"

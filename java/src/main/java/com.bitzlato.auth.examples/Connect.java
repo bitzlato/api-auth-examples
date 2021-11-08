@@ -29,7 +29,7 @@ public class Connect {
 
     static class TokenGenerator implements Supplier<String> {
         /**
-         * This is your private key. This key has id = 2
+         * This is your private key. This key has id = 1 (kid)
          */
         private final String jsonWebKey = "{" +
                 "\"kty\":\"EC\",\"alg\":\"ES256\",\"crv\":\"P-256\"," +
@@ -41,7 +41,7 @@ public class Connect {
         private final JWSHeader jwsHeader = new JWSHeader.Builder(ES256)
                 // You must provide the correct kid if an account has more than one key
                 // see https://tools.ietf.org/html/rfc7515#section-4.1.4
-                .keyID("2")
+                .keyID("1")
                 .build();
 
         private final ECDSASigner signer;
@@ -91,7 +91,7 @@ public class Connect {
     }
 
 
-    private static final URI baseUrl = URI.create("https://demo.bitzlato.com/api/p2p/");
+    private static final URI baseUrl = URI.create("https://www.bitzlato.com/api/p2p/");
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         final var tokenGen = new TokenGenerator();

@@ -104,7 +104,7 @@ $jwk = json_decode($secretKey, true);
 
 $headers["typ"] = 'JWT';
 $headers["alg"] = 'ES256';
-$headers["kid"] = '2';
+$headers["kid"] = '1';
 
 $claims["email"] = 'bitzlato.demo@gmail.com';
 $claims["aud"] = array('usr');
@@ -123,7 +123,7 @@ $curl = curl_init();
 // Set some options - we are passing in a useragent too here
 curl_setopt_array($curl, [
     CURLOPT_RETURNTRANSFER => 1,
-    CURLOPT_URL => 'https://demo.bitzlato.com/api/auth/whoami',
+    CURLOPT_URL => 'https://www.bitzlato.com/api/auth/whoami',
     CURLOPT_HTTPHEADER => array(
         "Authorization: Bearer $jws"
     )

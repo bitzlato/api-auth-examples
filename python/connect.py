@@ -21,20 +21,21 @@ def main():
     dt = datetime.datetime.now()
     ts = time.mktime(dt.timetuple())
     claims = {
-        # user identificator
+        # user identifier
         "email": "bitzlato.demo@gmail.com",
         # leave as is
         "aud": "usr",
         # token issue time
         "iat": int(ts),
-        # unique token identificator
+        # unique token identifier
         "jti": hex(random.getrandbits(64))
     }
     print(claims)
     # make token with claims from secret user key
-    token = jws.sign(claims, key, headers={"kid": "2"}, algorithm=ALGORITHMS.ES256)
+    # put the correct key id (kid)
+    token = jws.sign(claims, key, headers={"kid": "1"}, algorithm=ALGORITHMS.ES256)
 
-    conn = http.client.HTTPSConnection("demo.bitzlato.com", 443)
+    conn = http.client.HTTPSConnection("www.bitzlato.com", 443)
 
     # make  request against api endpoint with Authorization: Bearer <token> header
     res = conn.request("GET", "/api/auth/whoami", headers={

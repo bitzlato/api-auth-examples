@@ -1,10 +1,13 @@
 const axios = require('axios')
 const jose = require('node-jose')
 
-// секретный ключ пользователя (private key). ID данного ключа (kid) = "2"
+// секретный ключ пользователя (private key). ID данного ключа (kid) = "1",
+// его вам выдали при постановке ключа. Или же его потом можно найти в настройках в web интерфейсе
 const secret =
     {
-        "kty":"EC","alg":"ES256","crv":"P-256",
+        "kty":"EC",
+        "alg":"ES256",
+        "crv":"P-256",
         "x":"pSH0jvbtVZiseTpJZk0_yfudEIv86uwjeH_gr1qmOGA",
         "y":"eGdC9EIGmhCheM_T8vhS4Qwk7RfaPRBxF3W5omgBc_M",
         "d":"DuSjR5eZBp5S-9HNKA8kRQFA_3Akkept-dTbwFoq_3w"
@@ -39,7 +42,7 @@ async function connect() {
             format: 'compact',
             // You omit this header if the account has a single key
             // Этот заголовок можно не указывать, если у аккаунта единственный ключ
-            fields: { kid: "2" }
+            fields: { kid: "1" }
         },
         {key: secret, reference: false},
     )
@@ -54,7 +57,7 @@ async function connect() {
 
     // change to bitzlato api host
     // изменить на хост api bitzlato
-    axios.get('https://demo.bitzlato.com/api/auth/whoami', options)
+    axios.get('https://www.bitzlato.com/api/auth/whoami', options)
         .then(response => {
             console.log(response.data)
         })
