@@ -6,7 +6,7 @@
   "preferGlobal": true,
   "bin": "./connect.js",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "core-js": "^3.4.0",
     "node-jose": "^1.1.1"
   }
